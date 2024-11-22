@@ -1,0 +1,204 @@
+5. Handling Events in React
+THEORY EXERCISE
+
+• Question 1: How are events handled in React compared to vanilla JavaScript? Explain the concept of synthetic events.
+
+Answer:
+
+Handling Events in React vs. Vanilla JavaScript:
+
+Syntax:
+React uses camelCase syntax for event handlers (e.g., onClick instead of onclick).
+Event handlers are passed as functions, not as strings.
+Event Binding:
+In vanilla JavaScript, you add event listeners to DOM elements using methods like addEventListener.
+In React, event handlers are defined as props on JSX elements.
+Cross-Browser Consistency:
+React uses synthetic events to ensure consistent behavior across different browsers.
+
+Synthetic Events:
+
+Synthetic events are React’s wrapper around native DOM events. They standardize event handling and provide a consistent API across browsers.
+These events are lightweight and perform efficiently because React uses a single event listener for all events in the component tree.
+
+Example:
+
+jsx
+Copy code
+const handleClick = () => {
+  console.log("Button clicked!");
+};
+
+<button onClick={handleClick}>Click Me</button>;
+
+
+• Question 2: What are some common event handlers in React.js? Provide examples of onClick, onChange, and onSubmit.
+
+Answer:
+
+onClick: Triggered when an element is clicked.
+jsx
+Copy code
+const handleClick = () => {
+  alert("Button clicked!");
+};
+
+<button onClick={handleClick}>Click Me</button>;
+
+onChange: Triggered when the value of an input changes.
+jsx
+Copy code
+const handleChange = (event) => {
+  console.log("Input changed to:", event.target.value);
+};
+
+<input type="text" onChange={handleChange} />;
+
+onSubmit: Triggered when a form is submitted.
+jsx
+Copy code
+const handleSubmit = (event) => {
+  event.preventDefault();
+  alert("Form submitted!");
+};
+
+<form onSubmit={handleSubmit}>
+  <button type="submit">Submit</button>
+</form>;
+
+
+• Question 3: Why do you need to bind event handlers in class components?
+
+Answer: In class components, this keyword refers to the class instance. However, event handlers in JavaScript lose their context of this when passed as callbacks, leading to undefined errors. Binding ensures that the this keyword in the event handler points to the class instance.
+
+Ways to Bind:
+
+In the Constructor (Recommended):
+jsx
+Copy code
+constructor() {
+  super();
+  this.handleClick = this.handleClick.bind(this);
+}
+
+Using Arrow Functions (Modern Alternative):
+jsx
+Copy code
+handleClick = () => {
+  console.log("Clicked!");
+};
+
+LAB EXERCISE
+
+• Task 1: Create a button in a React component that, when clicked, changes the text from "Not Clicked" to "Clicked!" using event handling.
+
+Solution:
+
+Using Functional Component:
+
+jsx
+Copy code
+import React, { useState } from 'react';
+
+const ClickButton = () => {
+  const [text, setText] = useState("Not Clicked");
+
+  const handleClick = () => {
+    setText("Clicked!");
+  };
+
+  return (
+    <button onClick={handleClick}>{text}</button>
+  );
+};
+
+export default ClickButton;
+
+
+Using Class Component:
+
+jsx
+Copy code
+import React, { Component } from 'react';
+
+class ClickButton extends Component {
+  constructor() {
+    super();
+    this.state = { text: "Not Clicked" };
+  }
+
+  handleClick = () => {
+    this.setState({ text: "Clicked!" });
+  };
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>{this.state.text}</button>
+    );
+  }
+}
+
+export default ClickButton;
+
+
+• Task 2: Create a form with an input field in React. Display the value of the input field dynamically as the user types in it.
+
+Solution:
+
+Using Functional Component:
+
+jsx
+Copy code
+import React, { useState } from 'react';
+
+const DynamicInput = () => {
+  const [inputValue, setInputValue] = useState("");
+
+  const handleChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  return (
+    <div>
+      <form>
+        <input type="text" onChange={handleChange} />
+      </form>
+      <p>Typed Value: {inputValue}</p>
+    </div>
+  );
+};
+
+export default DynamicInput;
+
+
+Using Class Component:
+
+jsx
+Copy code
+import React, { Component } from 'react';
+
+class DynamicInput extends Component {
+  constructor() {
+    super();
+    this.state = { inputValue: "" };
+  }
+
+  handleChange = (event) => {
+    this.setState({ inputValue: event.target.value });
+  };
+
+  render() {
+    return (
+      <div>
+        <form>
+          <input type="text" onChange={this.handleChange} />
+        </form>
+        <p>Typed Value: {this.state.inputValue}</p>
+      </div>
+    );
+  }
+}
+
+export default DynamicInput;
+
+

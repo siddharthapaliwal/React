@@ -1,0 +1,126 @@
+THEORY EXERCISE
+
+Question 1: What do you mean by RESTful web services?
+
+RESTful web services (Representational State Transfer) are a set of web services that follow REST architecture principles for designing networked applications. They use HTTP methods (GET, POST, PUT, DELETE) to interact with resources, where each resource (such as a user, product, or order) is identified by a unique URL. RESTful APIs are stateless, meaning each request from the client contains all necessary information, and the server does not store client state between requests. RESTful services are lightweight, scalable, and widely used in web and mobile applications.
+
+Question 2: What is Json-Server? How we use it in React?
+
+JSON Server is a tool that lets you create a full fake REST API from a JSON file. It simulates real RESTful API requests such as GET, POST, PUT, DELETE, and PATCH without needing a backend server. In React, you can use JSON Server as a mock backend for API calls while developing applications. It allows you to simulate CRUD operations on a local database without a real server, making it ideal for testing and development.
+
+To use JSON Server in React:
+
+Install json-server with npm or yarn.
+bash
+Copy code
+npm install json-server
+
+Create a db.json file with your mock data.
+Add scripts in package.json to start the JSON server.
+json
+Copy code
+"scripts": {
+  "server": "json-server --watch db.json --port 5000"
+}
+
+Fetch data from the server in your React components using fetch or axios.
+
+Question 3: How do you fetch data from a Json-server API in React? Explain the role of fetch() or axios() in making API requests.
+
+To fetch data from a JSON Server API in React, you can use the fetch() function or axios to make HTTP requests. Here's how they work:
+
+fetch() is a native JavaScript function that allows you to make network requests to a specified URL. It returns a promise that resolves to the response object.
+
+Example using fetch():
+
+javascript
+Copy code
+fetch('http://localhost:5000/users')
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+
+axios() is a promise-based HTTP client that simplifies making requests and handling responses. It is more feature-rich compared to fetch() (like automatic JSON parsing and better error handling).
+
+Example using axios():
+
+javascript
+Copy code
+import axios from 'axios';
+
+axios.get('http://localhost:5000/users')
+  .then(response => console.log(response.data))
+  .catch(error => console.error('Error:', error));
+
+
+Both methods are used to send HTTP requests to the JSON Server API to fetch, post, update, or delete data.
+
+Question 4: What is Firebase? What features does Firebase offer?
+
+Firebase is a platform for building and managing mobile and web applications, developed by Google. It provides a set of tools and services to help developers build high-quality applications quickly.
+
+Key features of Firebase include:
+
+Firebase Realtime Database: A cloud-hosted database that stores data in JSON format and syncs in real time across all connected devices.
+Firebase Authentication: A service that provides easy-to-use methods for authenticating users with various providers, including Google, Facebook, and email/password.
+Cloud Firestore: A flexible, scalable NoSQL cloud database for storing and syncing data.
+Firebase Hosting: A static web hosting service for deploying web apps.
+Firebase Cloud Messaging (FCM): A service to send push notifications to users.
+Firebase Analytics: A free app measurement solution that provides insights on app usage and user engagement.
+
+Question 5: Discuss the importance of handling errors and loading states when working with APIs in React.
+
+When working with APIs in React, it's essential to handle errors and loading states to provide a better user experience.
+
+Loading state: Indicates when data is being fetched from the server. You can display a loading spinner or message to inform the user that the data is being loaded.
+Error handling: Ensures that any issues with the API call (such as network errors, server errors, or invalid responses) are caught and communicated to the user. Without error handling, users may face crashes or unexpected behavior.
+
+Handling these states improves user experience by making the app more interactive and transparent. Example:
+
+javascript
+Copy code
+const [loading, setLoading] = useState(true);
+const [data, setData] = useState(null);
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  fetch('https://api.example.com/data')
+    .then(response => response.json())
+    .then(data => {
+      setData(data);
+      setLoading(false);
+    })
+    .catch(error => {
+      setError('Failed to fetch data');
+      setLoading(false);
+    });
+}, []);
+
+LAB EXERCISE
+
+Task 1:
+
+Create a React component that fetches data from a public API and displays it in a table format:
+You can use fetch() or axios() to get data from a public API (e.g., https://jsonplaceholder.typicode.com/users).
+Display the fetched data in a table using React.
+Create a React app with Json-server and use Get, Post, Put, Delete, and Patch methods on Json-server API:
+Set up a db.json file with sample data (e.g., users, products).
+Use fetch() or axios() to implement CRUD operations (GET, POST, PUT, DELETE, PATCH).
+
+Task 2:
+
+Create a React app with Firebase CRUD and Authentication:
+Use Firebase Realtime Database or Firestore to perform CRUD operations.
+Implement Firebase Authentication for login and registration.
+Implement Google Authentication with Firebase API:
+Set up Firebase Authentication with Google as a sign-in provider.
+Use the firebase.auth() API to sign users in with their Google accounts.
+
+Task 3:
+
+Implement error handling and loading states for API calls:
+Display a loading spinner while the data is being fetched.
+Handle errors using .catch() in promises or try/catch in async/await.
+Show error messages when data fetch fails.
+
+

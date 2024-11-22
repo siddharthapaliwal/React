@@ -1,0 +1,119 @@
+2. JSX (JavaScript XML)
+THEORY EXERCISE
+
+• Question 1: What is JSX in React.js? Why is it used?
+
+Answer:
+
+JSX (JavaScript XML) is a syntax extension for JavaScript used in React.js that allows developers to write HTML-like code directly within JavaScript. It combines the power of JavaScript logic with the simplicity of writing markup. JSX is not a requirement to use React but is highly recommended because it makes the code more readable and expressive.
+
+Why is it used?
+
+Declarative Syntax: JSX makes it easier to visualize the UI and understand the structure of components.
+Dynamic Rendering: It allows embedding JavaScript expressions directly within the markup for dynamic content rendering.
+Improved Developer Experience: JSX makes it easier to debug and reduces the complexity of managing UI and JavaScript separately.
+
+• Question 2: How is JSX different from regular JavaScript? Can you write JavaScript inside JSX?
+
+Answer:
+
+Difference from Regular JavaScript:
+JSX looks similar to HTML but is not a string or a template. Instead, it is transformed into JavaScript code during the build process using tools like Babel.
+JSX allows embedding HTML-like syntax directly in JavaScript files, whereas regular JavaScript does not natively support this syntax.
+Writing JavaScript Inside JSX:
+Yes, JavaScript can be written inside JSX using curly braces {}. For example:
+jsx
+Copy code
+const name = "React";
+return <h1>Welcome to {name}!</h1>;
+
+Any valid JavaScript expression, such as variables, function calls, and ternary operators, can be used inside curly braces.
+
+• Question 3: Discuss the importance of using curly braces {} in JSX expressions.
+
+Answer:
+
+Curly braces {} in JSX are used to embed JavaScript expressions inside the JSX syntax. They allow dynamic content rendering and interactivity within components. Here's why they are important:
+
+Dynamic Rendering:
+Curly braces enable inserting variables, function results, or computed values into the JSX. For example:
+jsx
+Copy code
+const userName = "John";
+return <h1>Hello, {userName}!</h1>;
+
+Conditional Rendering:
+JavaScript logic, such as ternary operators, can be used within curly braces for conditional rendering:
+jsx
+Copy code
+const isLoggedIn = true;
+return <h1>{isLoggedIn ? "Welcome back!" : "Please log in."}</h1>;
+
+Integration with JavaScript Functions:
+Curly braces allow calling JavaScript functions directly inside JSX:
+jsx
+Copy code
+const getGreeting = () => "Hello, JSX!";
+return <h1>{getGreeting()}</h1>;
+
+
+Without curly braces, JSX would only display static content, limiting its usefulness in dynamic web applications.
+
+LAB EXERCISE
+
+• Task:
+
+Create a React component that renders the following JSX elements:
+A heading with the text "Welcome to JSX".
+A paragraph explaining JSX with dynamic data.
+
+Solution:
+
+jsx
+Copy code
+import React from 'react';
+
+const JSXDemo = () => {
+  const framework = "React";
+  const description = "a syntax extension for JavaScript that allows writing HTML-like code.";
+
+  return (
+    <div>
+      <h1>Welcome to JSX</h1>
+      <p>
+        JSX is {description} It is primarily used in {framework} to make UI development more intuitive.
+      </p>
+    </div>
+  );
+};
+
+export default JSXDemo;
+
+
+Explanation:
+
+The framework and description variables are defined in the component.
+These variables are dynamically inserted into the JSX using curly braces {}.
+
+To use this component:
+
+Create a new file named JSXDemo.js in the src folder.
+Replace the default component in App.js with:
+jsx
+Copy code
+import React from 'react';
+import JSXDemo from './JSXDemo';
+
+const App = () => {
+  return (
+    <div>
+      <JSXDemo />
+    </div>
+  );
+};
+
+export default App;
+
+Start the development server, and the output should display the heading and paragraph as required.
+
+

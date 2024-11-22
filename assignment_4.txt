@@ -1,0 +1,108 @@
+4. Props and State
+THEORY EXERCISE
+
+• Question 1: What are props in React.js? How are props different from state?
+
+Answer:
+
+Props:
+
+Props (short for properties) are a way to pass data from a parent component to a child component.
+They are read-only, meaning they cannot be modified by the receiving component.
+Props are used to customize components and make them reusable.
+
+State:
+
+State is a local, mutable data storage specific to a component.
+It represents the dynamic data of a component and can be modified using methods like useState (for functional components) or this.setState (for class components).
+State is used for managing data that changes over time, such as user inputs or dynamic content.
+
+Key Differences:
+
+AspectPropsStateMutabilityImmutable (cannot be changed)Mutable (can be updated)ScopePassed from parent to child componentsLocal to the componentUsageUsed to pass data and configure child componentsUsed to manage dynamic data within a componentAccessAvailable as props in functional components or this.props in class componentsManaged using useState or this.state• Question 2: Explain the concept of state in React and how it is used to manage component data.
+
+Answer:
+
+State is a built-in object in React that allows components to store and manage data that changes over time. When state changes, React automatically re-renders the component, reflecting the updated data in the UI.
+
+Key Points:
+
+Local to the Component: Each component has its own state, which cannot be accessed by other components directly.
+Initialization: State is initialized using:
+useState hook in functional components:
+jsx
+Copy code
+const [count, setCount] = useState(0);
+
+Constructor in class components:
+jsx
+Copy code
+constructor() {
+  super();
+  this.state = { count: 0 };
+}
+
+Updating State:
+Functional components use the state updater function, e.g., setCount().
+Class components use this.setState() to update state.
+
+Usage Examples:
+
+Form inputs
+Toggling UI elements
+Managing user interactions (e.g., counters, dropdowns)
+
+• Question 3: Why is this.setState() used in class components, and how does it work?
+
+Answer:
+
+this.setState() is a method in class components used to update the component's state. It notifies React that the state has changed, triggering a re-render of the component to reflect the updated data in the UI.
+
+How it works:
+
+Shallow Merge: this.setState() merges the provided state object with the current state instead of replacing it.
+Asynchronous Nature: State updates through this.setState() are batched and executed asynchronously for performance optimization. To execute code after the state update, you can use the optional callback:
+jsx
+Copy code
+this.setState({ count: this.state.count + 1 }, () => {
+  console.log(this.state.count);
+});
+
+
+Example:
+
+jsx
+Copy code
+class Counter extends React.Component {
+  constructor() {
+    super();
+    this.state = { count: 0 };
+  }
+
+  incrementCount = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.incrementCount}>Increment</button>
+      </div>
+    );
+  }
+}
+
+LAB EXERCISE
+
+• Task 1: Create a React component UserCard that accepts name, age, and location as props and displays them in a card format.
+
+Solution:
+
+jsx
+Copy code
+import React from 'react';
+
+const UserCard = (props) => {
+  return (
+    <div style={{ border: '1px solid 

@@ -1,0 +1,196 @@
+THEORY EXERCISE
+
+Question 1: What is the Context API in React? How is it used to manage global state across multiple components?
+
+The Context API in React is a way to share state across the entire application (or part of it) without having to pass props manually through every level of the component tree. This is particularly useful for managing global state like user authentication, themes, or language preferences that need to be accessible from many different components.
+
+The Context API is useful for avoiding prop drilling, which occurs when you pass props down through many layers of nested components. Instead, with Context, you can define the state in a central place and provide it to any component that needs it.
+
+Creating a context: You use createContext() to create a Context object, which will hold the global state.
+Providing the context: The Context.Provider component makes the context value available to all components in its subtree.
+Consuming the context: You can use the useContext() hook or Context.Consumer to access the context value in any child component.
+
+Example of Context API:
+
+javascript
+Copy code
+import React, { createContext, useState } from 'react';
+
+// Create a context
+const ThemeContext = createContext();
+
+// Create a provider component
+export function ThemeProvider({ children }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+
+In this example, ThemeContext holds the theme state (isDarkMode) and the function to toggle it (setIsDarkMode), and it's provided to all child components within the ThemeProvider.
+
+Question 2: Explain how createContext() and useContext() are used in React for sharing state.
+
+createContext(): This function creates a context object. It takes an optional default value that can be used if the context is not wrapped with a provider. This context will then be used to store and share data.
+javascript
+Copy code
+const ThemeContext = createContext(false); // default value is 'false' for light mode
+
+useContext(): This hook is used to consume the context value inside any functional component. It allows a component to access the nearest provider’s value without needing to pass props through each level of the component tree.
+javascript
+Copy code
+const { isDarkMode, setIsDarkMode } = useContext(ThemeContext);
+
+
+The useContext() hook simplifies consuming context values and eliminates the need to use Context.Consumer for functional components.
+
+LAB EXERCISE
+
+Task 1: Create a simple theme toggle (light/dark mode) using the Context API. The theme state should be shared across multiple components.
+
+Steps:
+
+Create a context for the theme state using createContext().
+Create a ThemeProvider component that manages the isDarkMode state and provides it to the rest of the app.
+Create a ThemeToggle component that allows the user to toggle between light and dark modes.
+Use the context value (isDarkMode) to apply CSS classes for light/dark mode styling.
+
+Example Code:
+
+javascript
+Copy code
+import React, { createContext, useState, useContext } from 'react';
+
+// Create context for theme
+const ThemeContext = createContext();
+
+// ThemeProvider component
+export function ThemeProvider({ children }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleTheme = () => {
+    setIsDarkMode(prevMode => !prevMode);
+  };
+
+  return (
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// ThemeToggle component
+function ThemeToggle() {
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <button onClick={toggleTheme}>
+      Switch to {isDarkMode ? 'Light' : 'Dark'} Mode
+    </button>
+  );
+}
+
+// App component
+function App() {
+  const { isDarkMode } = useContext(ThemeContext);
+
+  return (
+    <div style={{ background: isDarkMode ? 'black' : 'white', color: isDarkMode ? 'white' : 'black' }}>
+      <h1>Theme Toggle Example</h1>
+      <ThemeToggle />
+    </div>
+  );
+}
+
+// Main entry point
+export function Main() {
+  return (
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  );
+}
+
+
+In this example, ThemeContext manages the state, and the ThemeToggle component allows users to toggle the theme.
+
+Task 2: Use the Context API to create a global user authentication system. If the user is logged in, display a welcome message; otherwise, prompt them to log in.
+
+Steps:
+
+Create a context for authentication using createContext().
+Create a AuthProvider that manages the isLoggedIn state and provides it to the app.
+Create a Login and Welcome component to display the relevant message based on authentication status.
+Use useContext() in the components to access the authentication state.
+
+Example Code:
+
+javascript
+Copy code
+import React, { createContext, useState, useContext } from 'react';
+
+// Create context for authentication
+const AuthContext = createContext();
+
+// AuthProvider component
+export function AuthProvider({ children }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const login = () => setIsLoggedIn(true);
+  const logout = () => setIsLoggedIn(false);
+
+  return (
+    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+// Login component
+function Login() {
+  const { login } = useContext(AuthContext);
+
+  return <button onClick={login}>Log In</button>;
+}
+
+// Welcome component
+function Welcome() {
+  const { isLoggedIn, logout } = useContext(AuthContext);
+
+  return isLoggedIn ? (
+    <div>
+      <h2>Welcome Back!</h2>
+      <button onClick={logout}>Log Out</button>
+    </div>
+  ) : (
+    <div>
+      <h2>Please log in to continue.</h2>
+      <Login />
+    </div>
+  );
+}
+
+// App component
+function App() {
+  return (
+    <div>
+      <h1>Authentication Example</h1>
+      <Welcome />
+    </div>
+  );
+}
+
+// Main entry point
+export function Main() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
+
+In this example, AuthContext provides the authentication state, and the Welcome component conditionally displays the welcome message or login prompt based on whether the user is logged in.

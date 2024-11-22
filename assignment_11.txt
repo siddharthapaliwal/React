@@ -1,0 +1,120 @@
+11. Routing in React (React Router)
+THEORY EXERCISE
+
+• Question 1: What is React Router? How does it handle routing in single-page applications?
+
+Answer:
+
+React Router is a library for handling routing in React applications. It allows developers to define routes and navigation in single-page applications (SPAs). Instead of reloading the page, React Router dynamically renders the appropriate components based on the URL, making transitions seamless and fast.
+
+How it works:
+
+URL-based Rendering: React Router maps URLs to specific components.
+Client-Side Routing: No server requests are made for page transitions.
+Declarative Approach: Routing is declared in JSX, making it easy to manage and update.
+
+• Question 2: Explain the difference between BrowserRouter, Route, Link, and Switch components in React Router.
+
+Answer:
+
+BrowserRouter:
+Provides the routing context for the app.
+Uses the HTML5 history API to keep the UI in sync with the URL.
+Route:
+Defines the mapping between a URL and a React component.
+Syntax:
+jsx
+Copy code
+<Route path="/home" element={<Home />} />
+
+Link:
+Used to create navigation links in the app.
+Replaces <a> tags to prevent page reloads.
+Syntax:
+jsx
+Copy code
+<Link to="/about">About</Link>
+
+Switch (or Routes in newer versions):
+Ensures that only the first matching route is rendered.
+Useful for avoiding multiple components rendering simultaneously.
+LAB EXERCISE
+
+• Task 1: Set up a basic React Router with two routes: one for a Home page and one for an About page. Display the appropriate content based on the URL.
+
+Steps:
+
+Install React Router:
+bash
+Copy code
+npm install react-router-dom
+
+Create Home and About components:
+jsx
+Copy code
+const Home = () => <h2>Welcome to the Home Page</h2>;
+const About = () => <h2>About Us</h2>;
+
+Set up React Router:
+jsx
+Copy code
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
+
+
+• Task 2: Create a navigation bar using React Router’s Link component that allows users to switch between the Home, About, and Contact pages.
+
+Steps:
+
+Create Home, About, and Contact components:
+jsx
+Copy code
+const Home = () => <h2>Welcome to the Home Page</h2>;
+const About = () => <h2>About Us</h2>;
+const Contact = () => <h2>Contact Us</h2>;
+
+Update App with Navigation Bar:
+jsx
+Copy code
+import React from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/about">About</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;

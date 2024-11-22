@@ -1,0 +1,288 @@
+THEORY EXERCISE
+
+Question 1: What is Redux, and why is it used in React applications? Explain the core concepts of actions, reducers, and the store.
+
+Redux is a state management library used with JavaScript applications, most commonly in React applications. It helps manage the state of an application in a predictable way by using a single store to hold the entire state and enforcing the use of actions and reducers to modify the state. Redux is especially useful for applications with complex state that needs to be shared across multiple components or needs to be manipulated in a predictable manner.
+
+The core concepts of Redux are:
+
+Actions: Actions are payloads of information that send data from the application to the Redux store. They describe "what happened" but do not specify how the state should change. An action is typically an object with a type (which defines the action's name) and an optional payload (the data related to the action).
+
+Example:
+javascript
+Copy code
+const increment = { type: 'INCREMENT' };
+const decrement = { type: 'DECREMENT' };
+
+
+Reducers: Reducers are functions that specify how the application's state changes in response to an action. They take the current state and the action as arguments and return a new state. The state in Redux is read-only and can only be changed by dispatching an action that is handled by a reducer.
+
+Example:
+javascript
+Copy code
+function counterReducer(state = 0, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+
+Store: The store holds the entire state of the application. It allows components to subscribe to changes in the state and dispatch actions to modify the state. There is only one store in a Redux application, and it is created by using createStore() from Redux.
+
+Example:
+javascript
+Copy code
+import { createStore } from 'redux';
+const store = createStore(counterReducer);
+
+
+Redux helps with maintaining consistency in large applications, where state management can otherwise become complex and difficult to maintain.
+
+Question 2: How does Recoil simplify state management in React compared to Redux?
+
+Recoil is a state management library specifically built for React, and it offers a simpler and more flexible approach to managing state compared to Redux. While Redux uses a single global store and requires you to work with actions and reducers, Recoil introduces atoms and selectors for state management, which can be easier to set up and use in certain scenarios.
+
+Here are key differences:
+
+Atoms: In Recoil, the state is managed using "atoms," which are units of state that can be shared between components. Each atom represents a piece of state that can be read from or written to by any component. Components can subscribe to atoms, and when the atom's state changes, the components that are subscribed to it will re-render automatically.
+
+Example:
+javascript
+Copy code
+import { atom } from 'recoil';
+
+const counterState = atom({
+  key: 'counterState', // unique ID (with respect to other atoms)
+  default: 0, // default value
+});
+
+
+Selectors: Selectors are pure functions that compute derived state based on atoms or other selectors. They can be used to transform or compute data before it's used by components.
+
+Example:
+javascript
+Copy code
+import { selector } from 'recoil';
+
+const doubledCounter = selector({
+  key: 'doubledCounter',
+  get: ({ get }) => {
+    const counter = get(counterState);
+    return counter * 2;
+  },
+});
+
+
+Simpler setup: Recoil does not require you to define reducers or actions. Instead, atoms and selectors act as a way to manage state in a more modular and flexible way. There is no need for boilerplate code like reducers or action creators in Recoil.
+
+Component-level subscriptions: With Recoil, components can subscribe directly to atoms or selectors, making it easier to manage localized state in a declarative manner without needing to dispatch actions or handle reducers.
+
+In summary, Recoil simplifies state management by using a more React-friendly API based on atoms and selectors, reducing the boilerplate code required for Redux and providing more granular control over state management.
+
+LAB EXERCISE
+
+Task 1: Create a simple counter application using Redux for state management. Implement actions to increment and decrement the counter.
+
+Steps:
+
+Set up Redux by installing the necessary libraries.
+
+bash
+Copy code
+npm install redux react-redux
+
+
+Create actions and reducers for the counter.
+
+Set up the store and connect it to your React app using Provider.
+
+Example Code:
+
+javascript
+Copy code
+import React from 'react';
+import { createStore } from 'redux';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
+// Actions
+const increment = () => ({ type: 'INCREMENT' });
+const decrement = () => ({ type: 'DECREMENT' });
+
+// Reducer
+const counterReducer = (state = 0, action) => {
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  }
+};
+
+// Store
+const store = createStore(counterReducer);
+
+// Counter Component
+const Counter = () => {
+  const count = useSelector(state => state);
+  const dispatch = useDispatch();
+
+  return (
+    <div>
+      <h1>Counter: {count}</h1>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(decrement())}>Decrement</button>
+    </div>
+  );
+};
+
+// App Component
+const App = () => (
+  <Provider store={store}>
+    <Counter />
+  </Provider>
+);
+
+export default App;
+
+
+Task 2: Build a todo list application using Recoil for state management. Allow users to add, remove, and mark tasks as complete.
+
+Steps:
+
+Install Recoil.
+
+bash
+Copy code
+npm install recoil
+
+
+Create atoms for managing the todo list state.
+
+Example Code:
+
+javascript
+Copy code
+import React, { useState } from 'react';
+import { atom, useRecoilState } from 'recoil';
+
+// Atoms
+const todoListState = atom({
+  key: 'todoListState',
+  default: [],
+});
+
+// TodoList Component
+const TodoList = () => {
+  const [todos, setTodos] = useRecoilState(todoListState);
+  const [newTodo, setNewTodo] = useState('');
+
+  const addTodo = () => {
+    setTodos([...todos, { text: newTodo, completed: false }]);
+    setNewTodo('');
+  };
+
+  const toggleCompletion = index => {
+    const updatedTodos = todos.map((todo, i) =>
+      i === index ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updatedTodos);
+  };
+
+  const removeTodo = index => {
+    const updatedTodos = todos.filter((todo, i) => i !== index);
+    setTodos(updatedTodos);
+  };
+
+  return (
+    <div>
+      <input
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        placeholder="New task"
+      />
+      <button onClick={addTodo}>Add Todo</button>
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={index}>
+            <span
+              style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+              onClick={() => toggleCompletion(index)}
+            >
+              {todo.text}
+            </span>
+            <button onClick={() => removeTodo(index)}>Remove</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default TodoList;
+
+
+Task 3: Build a CRUD application using Redux-Toolkit for state management. Allow users to add, remove, delete and update.
+
+Steps:
+
+Install Redux Toolkit.
+
+bash
+Copy code
+npm install @reduxjs/toolkit react-redux
+
+
+Set up Redux Toolkit with slices and actions.
+
+Example Code:
+
+javascript
+Copy code
+import React, { useState } from 'react';
+import { createSlice, configureStore } from '@reduxjs/toolkit';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
+// Slice
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState: [],
+  reducers: {
+    addTodo: (state, action) => {
+      state.push({ id: Date.now(), text: action.payload, completed: false });
+    },
+    removeTodo: (state, action) => {
+      return state.filter(todo => todo.id !== action.payload);
+    },
+    toggleCompletion: (state, action) => {
+      const todo = state.find(todo => todo.id === action.payload);
+      if (todo) todo.completed = !todo.completed;
+    },
+    updateTodo: (state, action) => {
+      const todo = state.find(todo => todo.id === action.payload.id);
+      if (todo) todo.text = action.payload.text;
+    },
+  },
+});
+
+// Store
+const store = configureStore({
+  reducer: {
+    todos: todosSlice.reducer,
+  },
+});
+
+// TodoList Component
+const TodoList = () => {
+  const todos = useSelector(state => state.todos);
+  const dispatch = useDispatch();
+  const [newTodo, setNewTodo] = useState('');
+
+
+  const handle

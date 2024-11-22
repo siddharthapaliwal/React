@@ -1,0 +1,133 @@
+9. Lifecycle Methods (Class Components)
+THEORY EXERCISE
+
+• Question 1: What are lifecycle methods in React class components? Describe the phases of a component’s lifecycle.
+
+Answer:
+
+Lifecycle methods in React are special methods in class components that allow developers to hook into the component's lifecycle—managing how the component is created, updated, and destroyed.
+
+Phases of a Component's Lifecycle:
+
+Mounting:
+The component is created and added to the DOM.
+Key methods: constructor(), static getDerivedStateFromProps(), render(), componentDidMount().
+Updating:
+The component re-renders due to state or prop changes.
+Key methods: static getDerivedStateFromProps(), shouldComponentUpdate(), render(), getSnapshotBeforeUpdate(), componentDidUpdate().
+Unmounting:
+The component is removed from the DOM.
+Key method: componentWillUnmount().
+Error Handling (Optional):
+Handles errors during rendering, lifecycle methods, or in constructors of child components.
+Key method: componentDidCatch().
+
+• Question 2: Explain the purpose of componentDidMount(), componentDidUpdate(), and componentWillUnmount().
+
+Answer:
+
+componentDidMount():
+Called once, immediately after the component is mounted in the DOM.
+Commonly used for:
+Fetching data from APIs.
+Initializing timers or subscriptions.
+componentDidUpdate():
+Invoked after the component is updated due to changes in props or state.
+Commonly used for:
+Reacting to prop or state changes (e.g., fetching data based on new props).
+Updating the DOM or making additional API calls.
+componentWillUnmount():
+Called just before the component is removed from the DOM.
+Commonly used for:
+Cleaning up resources like timers, subscriptions, or event listeners.
+LAB EXERCISE
+
+• Task 1: Create a class component that fetches data from an API when the component mounts using componentDidMount(). Display the data in the component.
+
+Solution:
+
+jsx
+Copy code
+import React, { Component } from "react";
+
+class DataFetcher extends Component {
+  state = {
+    data: null,
+    isLoading: true,
+    error: null,
+  };
+
+  componentDidMount() {
+    // Replace with your API endpoint
+    fetch("https://jsonplaceholder.typicode.com/posts/1")
+      .then((response) => response.json())
+      .then((data) => this.setState({ data, isLoading: false }))
+      .catch((error) => this.setState({ error, isLoading: false }));
+  }
+
+  render() {
+    const { data, isLoading, error } = this.state;
+
+    if (isLoading) {
+      return <p>Loading...</p>;
+    }
+
+    if (error) {
+      return <p>Error fetching data: {error.message}</p>;
+    }
+
+    return (
+      <div>
+        <h3>Data Fetched:</h3>
+        <p>{data.title}</p>
+        <p>{data.body}</p>
+      </div>
+    );
+  }
+}
+
+export default DataFetcher;
+
+
+• Task 2: Implement a component that logs a message to the console when it updates using componentDidUpdate(). Log another message when the component unmounts using componentWillUnmount().
+
+Solution:
+
+jsx
+Copy code
+import React, { Component } from "react";
+
+class LoggerComponent extends Component {
+  state = {
+    count: 0,
+  };
+
+  incrementCount = () => {
+    this.setState((prevState) => ({ count: prevState.count + 1 }));
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.count !== this.state.count) {
+      console.log(`Component updated: Count is now ${this.state.count}`);
+    }
+  }
+
+  componentWillUnmount() {
+    console.log("Component will unmount: Cleaning up...");
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Logger Component</h3>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.incrementCount}>Increment</button>
+      </div>
+    );
+  }
+}
+
+export default LoggerComponent;
+
+
+

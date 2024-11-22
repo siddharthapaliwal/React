@@ -1,0 +1,100 @@
+3. Components (Functional & Class Components)
+THEORY EXERCISE
+• Question 1: What are components in React? Explain the difference between functional components and class components.
+Answer:
+What are Components in React? Components are the building blocks of a React application. They represent reusable and self-contained pieces of the user interface. Components can manage their own state and logic, making it easier to develop and maintain complex UIs.
+Difference Between Functional Components and Class Components:
+AspectFunctional ComponentsClass ComponentsDefinitionPlain JavaScript functions that return JSX.ES6 classes that extend React.Component.State ManagementUse React hooks (e.g., useState, useEffect) for state.Manage state using this.state and this.setState().Lifecycle MethodsUse hooks like useEffect for lifecycle functionality.Use methods like componentDidMount, componentDidUpdate.Code SimplicityTypically shorter and easier to read.More verbose due to boilerplate code.React VersionIntroduced as stateless components; gained stateful capabilities with React 16.8 (hooks).Have been a core part of React since its inception.• Question 2: How do you pass data to a component using props?
+Answer:
+Props (short for properties) are a way to pass data from a parent component to a child component. They are read-only and help customize the behavior and appearance of child components.
+How to pass props:
+Passing Props: Props are passed to a child component as attributes in JSX:
+jsx
+Copy code
+<ChildComponent name="John" age={25} />
+
+Accessing Props: In the child component:
+Functional Component: Props are accessed as an argument.
+jsx
+Copy code
+const ChildComponent = (props) => {
+  return <h1>Hello, {props.name}!</h1>;
+};
+
+Class Component: Props are accessed using this.props.
+jsx
+Copy code
+class ChildComponent extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}!</h1>;
+  }
+}
+
+• Question 3: What is the role of render() in class components?
+Answer:
+The render() method is a required function in class components that describes what the component should display in the UI. It returns JSX, which is transformed into HTML by React to render on the web page.
+Key Points:
+Output Definition: render() defines the structure and content of the component's UI.
+Pure Function: The render() method must be a pure function, meaning it cannot modify the component's state or props.
+Lifecycle Role: It is called during the mounting and updating phases of the component lifecycle.
+LAB EXERCISE
+• Task 1: Create a functional component Greeting that accepts a name as a prop and displays "Hello, [name]!".
+Solution:
+jsx
+Copy code
+import React from 'react';
+
+const Greeting = (props) => {
+  return <h1>Hello, {props.name}!</h1>;
+};
+
+export default Greeting;
+
+To use the Greeting component:
+jsx
+Copy code
+import React from 'react';
+import Greeting from './Greeting';
+
+const App = () => {
+  return (
+    <div>
+      <Greeting name="John" />
+    </div>
+  );
+};
+
+export default App;
+
+• Task 2: Create a class component WelcomeMessage that displays "Welcome to React!" and uses a render() method.
+Solution:
+jsx
+Copy code
+import React, { Component } from 'react';
+
+class WelcomeMessage extends Component {
+  render() {
+    return <h1>Welcome to React!</h1>;
+  }
+}
+
+export default WelcomeMessage;
+
+To use the WelcomeMessage component:
+jsx
+Copy code
+import React from 'react';
+import WelcomeMessage from './WelcomeMessage';
+
+const App = () => {
+  return (
+    <div>
+      <WelcomeMessage />
+    </div>
+  );
+};
+
+export default App;
+
+
+
